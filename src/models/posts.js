@@ -17,5 +17,9 @@ const postSchema = new Schema({
     restaurantId: {
         type: String,
         required: required
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
     }
 })
