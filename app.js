@@ -4,7 +4,7 @@ import {mongooseConection} from "./src/config/db.js"
 
 
 const app = express();
- dotenv.config();
+  dotenv.config();
 const port= process.env.PORT
 mongooseConection();
 

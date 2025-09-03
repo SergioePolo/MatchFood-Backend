@@ -5,21 +5,25 @@ const {Schema} = mongoose;
 const postSchema = new Schema({
     Image:{
         type: String,
-        required: required
+        required: true
     },
     comment:{
         type: String,
     },
     userId: {
-        type: String,
-        required: required
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "users",
+        required: true
     },
     restaurantId: {
-        type: String,
-        required: required
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"restaurants",
+        required: true
     },
     createdAt: {
         type: Date,
         default: Date.now
     }
 })
+
+const postsModel = mongoose.model("posts", postSchema);
