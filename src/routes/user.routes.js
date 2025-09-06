@@ -1,6 +1,6 @@
 import express from "express";
 
-import { postUser, getUser } from "../controllers/user.controller.js";
+import { postUser, getUser, putUserById, deleteUserById } from "../controllers/user.controller.js";
 
 export const userRouter =express.Router();
 
@@ -10,4 +10,10 @@ userRouter.post("/", postUser);
 
 //Get
 
-userRouter.get ("/", getUser)
+userRouter.get ("/", getUser) 
+
+//PUT
+userRouter.put ("/:_id", putUserById) 
+
+//
+userRouter.delete ("/:_id", deleteUserById)

@@ -7,7 +7,7 @@ import bcryptjs from "bcryptjs";
 
 
 export const postUser = async (request, response) => {
-console.log(request.body)
+
 try { const {firstName, lastName, email, phone, password, city, categories, address} = request.body;
     
 const codePass= await bcryptjs.hash(password, 10)
@@ -37,8 +37,17 @@ password:codePass
 
 //Get
 
-export const getUser = (request, response)=> {
-    return response.json({"mensaje":"funciona"})
+export const getUser = async (request, response)=> {
+    try { const alluser = await userModel.find();
+
+
+ return response.status (201).json({"mensaje": "Usuarios de MatchFood", "data": alluser})
+    } catch (error) {return response.status(400).json({
+            "mensaje": "Ocurrió un error al crear usuario",
+            "error": error.message || error 
+        })
+        
+    }
 }
 
 //Put
@@ -67,9 +76,8 @@ export const deleteUserById = async(request, response) => {
 
 try {
     const idForDelete= request.params._id;
-    const dataForDelete= request.body;
-
-    await userModel.findByIdAndDelete(idForDelete, dataForDelete);
+   
+    await userModel.findByIdAndDelete(idForDelete);
     return response.status(200).json({"mensaje": "Usuario eliminado con exito"})
     
    } catch (error) {
