@@ -4,6 +4,7 @@ import {mongooseConection} from "./src/config/db.js";
 
 
 import { userRouter } from "./src/routes/user.routes.js";
+import {restaurantRouter} from "./src/routes/restaurants.routes.js";
 
 const app = express();
   dotenv.config();
@@ -17,7 +18,7 @@ app.get('/', (req, res) => {
 app.use(express.json())
 
 app.use("/user", userRouter);
-
+app.use("/restaurants", restaurantRouter);
 
 app.listen(port,() =>{
     console.log (`Servidor escuchando en http://localhost:${port}`);
