@@ -2,14 +2,14 @@ import mongoose from "mongoose";
 
 const {Schema} = mongoose;
 
-const scoreSchema = new Schema({
+const ratingSchema = new Schema({
     image:{
         type: String
     },
     comment:{
         type: String
     },
-    score:{
+    rating:{
         type: Number,
         required: true
     },
@@ -29,4 +29,4 @@ const scoreSchema = new Schema({
     }
 })
 
-const scoreModel = mongoose.model("restaurantScores", scoreSchema);
+export const ratingModel = mongoose.model("restaurantRatings", ratingSchema);
