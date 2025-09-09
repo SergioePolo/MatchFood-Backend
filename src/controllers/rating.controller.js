@@ -17,7 +17,7 @@ export const postRating = async ( req, res ) => {
 
 export const getAllRatings = async ( req, res ) => {
     try {
-        const response = await ratingModel.find();
+        const response = await ratingModel.find().populate('userId').populate('restaurantId');
 
         return res.status(200).json({
             data: response

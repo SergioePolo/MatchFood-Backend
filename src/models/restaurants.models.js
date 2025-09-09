@@ -26,8 +26,9 @@ const restaurantSchema = new Schema({
         type: String,
         required: true
     },
-    rating: {
-        type: Number,
+    ratingId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"restaurantRatings",
         required: true
     },
     createdAt: {

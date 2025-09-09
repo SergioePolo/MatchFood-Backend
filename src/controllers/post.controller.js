@@ -17,7 +17,7 @@ export const createPost = async ( req,res ) => {
 
 export const getPosts = async ( req, res ) => {
     try {
-        const reponse = await postsModel.find();
+        const reponse = await postsModel.find().populate("restaurantId").populate("userId");
 
         return res.status(200).json({
             data: reponse
