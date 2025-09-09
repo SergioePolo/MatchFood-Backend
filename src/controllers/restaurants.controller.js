@@ -24,7 +24,7 @@ export const postRestaurant = async (request, response) => {
 
 export const getAllRestaurants = async (request, response) => {
     try {
-        const allRestaurants = await restaurantsModel.find();
+        const allRestaurants = await restaurantsModel.find().populate('rating');
 
         return response.status(200).json({
             "mensaje": "Petición exitosa",
