@@ -29,12 +29,14 @@ const userSchema = new Schema({
     },   
     categories:{
         type:String,
-        required: true,
         enum: ["carne", "pescado", "pollo"],
     },
     address:{
         type:String,
         required: true
+    },
+    profilePicture: {
+        type: String,
     }
 })
 

@@ -24,7 +24,7 @@ export const postRestaurant = async (request, response) => {
 
 export const getAllRestaurants = async (request, response) => {
     try {
-        const allRestaurants = await restaurantsModel.find().populate('rating');
+        const allRestaurants = await restaurantsModel.find().populate('ratingId');
 
         return response.status(200).json({
             "mensaje": "Petición exitosa",
@@ -74,6 +74,23 @@ export const deleteRestaurantById = async (request, response) => {
     } catch (error) {
         return response.status(500).json({
             "mensaje": "Ocurrió un error al eliminar restaurante",
+            "error": error.message || error
+        })
+    }
+}
+
+export const getAllRestaurantsByCity = async (req, res) =>{
+    try {
+        const city = req.params.id;
+        const response = await restaurantsModel.find({city: city});
+
+        return res.status(200).json({
+            data: response
+        });
+
+    } catch (error) {
+        return response.status(500).json({
+            "mensaje": `Ocurrió un error al buscar los restaurants de la ciudad ${req.params.restaurant}`,
             "error": error.message || error
         })
     }
