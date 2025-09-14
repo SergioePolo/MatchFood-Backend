@@ -1,5 +1,5 @@
 import express from "express";
-import { postRestaurant, getAllRestaurants, putRestaurantById, deleteRestaurantById } from "../controllers/restaurants.controller.js";
+import { postRestaurant, getAllRestaurants, putRestaurantById, deleteRestaurantById, getAllRestaurantsByCity } from "../controllers/restaurants.controller.js";
 
 export const restaurantRouter = express.Router();
 
@@ -14,4 +14,6 @@ restaurantRouter.put("/actualizar/:id", putRestaurantById);
 
 //Delete
 restaurantRouter.delete("/eliminar/:id", deleteRestaurantById);
+
+restaurantRouter.get("/getByCity/:id", getAllRestaurantsByCity);
 
