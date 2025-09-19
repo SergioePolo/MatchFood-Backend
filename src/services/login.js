@@ -26,10 +26,22 @@ try { const {emailLogin, passwordLogin}= request.body
 const payload ={
     id: userFound._id,
     user: userFound.firstName}
-    if (userFound.role)
+    if (userFound.rol === "Admin"){payload.Admin =true;} else {payload.Admin =false;}
+
+    const token = await generateToken(payload);
+    console.log ("payload", payload);
+    console.log ("token", token);
 
 
-}catch (error) {
+    return response.status(200).json({
+
+        "mensaje": "Inicio de sesión exitoso, bienvenido a MatchFood",
+        "token": token
+    })
+
+}catch (error) { return response.status(400).json({
+    "mensaje":"Lo sentimos, hubo un error al iniciar tu sesión", "error": error.message || error
+})
     
 }
 
