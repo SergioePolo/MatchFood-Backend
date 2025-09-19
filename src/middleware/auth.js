@@ -20,18 +20,25 @@ export const auth = (requiredRole) => {
   
        
           if(requiredRole === "admin" && decoded.admin === false){
-              return response.status(401).json({
+              return response.status(403).json({
                   "mensaje": "Acceso no permitido, no eres administrador"
               });
           }
   
       } catch (error) {
+        if (error.name === "TokenExpiredError") {
+            return response.status(401).json({
+              mensaje: "El token ha expirado, inicia sesión nuevamente",
+            });
+          }
+
         return response.status(401).json({
           mensaje: "Falló la autenticación: Token no permitido",
         });
       }
-  
+
+   
     
       next();
     };
-  };
+  }
