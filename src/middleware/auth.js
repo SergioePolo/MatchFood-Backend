@@ -41,4 +41,4 @@ export const auth = (requiredRole) => {
     
       next();
     };
-  };
+  }
