@@ -37,6 +37,10 @@ const userSchema = new Schema({
     },
     profilePicture: {
         type: String,
+    },
+    rol: {
+        type: String,
+        enum: ["Usuario", "Restaurante","Admin"]
     }
 })
 
