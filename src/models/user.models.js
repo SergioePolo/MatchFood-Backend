@@ -40,7 +40,12 @@ const userSchema = new Schema({
     },
     rol: {
         type: String,
-        enum: ["Usuario", "Restaurante","Admin"]
+        enum: ["Usuario", "Restaurante","Admin"],
+        required: true
+    },
+    userId:{
+        type: String,
+        required: true
     }
 })
 

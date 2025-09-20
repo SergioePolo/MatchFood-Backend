@@ -1,19 +1,25 @@
 import express from "express";
-
 import { postUser, getUser, putUserById, deleteUserById } from "../controllers/user.controller.js";
+import { upload } from "../config/multer.js";
+export const userRouter = express.Router();
 
-export const userRouter =express.Router();
-
-//Post 
-
+//Create user
 userRouter.post("/", postUser);
 
-//Get
+//Show all Users
+userRouter.get("/", getUser);
 
-userRouter.get ("/", getUser) 
+//Update user
+userRouter.put(
+    "/:id/",
+    (req, res, next) => {
+        req.uploadType = "userProfile";
+        req.userId = req.params.id;
+        next();
+    },
+    upload.single('profilePicture'),
+    putUserById
+);
 
-//PUT
-userRouter.put ("/:_id", putUserById) 
-
-//
-userRouter.delete ("/:_id", deleteUserById)
+//Delete user
+userRouter.delete("/:_id", deleteUserById);
