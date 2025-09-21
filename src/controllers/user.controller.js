@@ -1,48 +1,37 @@
 import { userModel } from "../models/user.models.js";
 import bcryptjs from "bcryptjs";
 
+//CreateUser
+export const postUser = async (req, res) => {
+try { 
 
-
-//Post
-
-
-export const postUser = async (request, response) => {
-
-try { const {firstName, lastName, email, phone, password, city, categories, address} = request.body;
+    const { password } = req.body;
     
-const codePass= await bcryptjs.hash(password, 10)
+    const codePass= await bcryptjs.hash(password, 10);
+    
+    const newUser = {
+        ...req.body,
+        password:codePass,
+    }
 
-await userModel.create({
-firstName, 
-lastName, 
-email, 
-phone, 
-city, 
-categories, 
-address, 
-password:codePass
+    await userModel.create(newUser);
+    return res.status (201).json({"mensaje": "Usuario creado, Bienvenido a MatchFood"})
 
-
-});
-
- return response.status (201).json({"mensaje": "Usuario creado, Bienvenido a MatchFood"})
-    } catch (error) {return response.status(400).json({
+    } catch (error) {
+        return res.status(400).json({
             "mensaje": "Ocurrió un error al crear usuario",
             "error": error.message || error 
         })
-        
     }
-
 };
 
-//Get
-
-export const getUser = async (request, response)=> {
+//GetAllUsers
+export const getUser = async (req, res)=> {
     try { const alluser = await userModel.find();
 
 
- return response.status (201).json({"mensaje": "Usuarios de MatchFood", "data": alluser})
-    } catch (error) {return response.status(400).json({
+ return res.status (201).json({"mensaje": "Usuarios de MatchFood", "data": alluser})
+    } catch (error) {return res.status(400).json({
             "mensaje": "Ocurrió un error al crear usuario",
             "error": error.message || error 
         })
@@ -50,40 +39,45 @@ export const getUser = async (request, response)=> {
     }
 }
 
-//Put
+//Update User
 
-export  const putUserById = async (request, response) => {
+export  const putUserById = async (req, res) => {
+    try {
+        const idForUpdate= req.params.id;
+        const dataForUpdate= req.body;
 
-try {
-    const idForUpdate= request.params._id;
-    const dataForUpdate= request.body;
+        if(dataForUpdate.password){
+            dataForUpdate.password = await bcryptjs.hash(dataForUpdate.password, 10);
+        }
 
-    await userModel.findByIdAndUpdate(idForUpdate, dataForUpdate);
-    return response.status (200).json ({
-        "mensaje": "Usuario Actualizado"
-    });
-    
-   } catch (error) {
-    return response.status(500).json({ "mensaje": "Intenta actualizar mas tarde",
-    "error": error  || error.message
-    });
-   };
+        if(req.file){
+            dataForUpdate.profilePicture = `/uploads/users/profilePictures/${req.userId}/${req.file.filename}`;
+        }
+        await userModel.findByIdAndUpdate(idForUpdate, dataForUpdate);
+        return res.status (200).json ({
+            "mensaje": "Usuario Actualizado"
+        });
+        
+    } catch (error) {
+        return res.status(500).json({ "mensaje": "Intenta actualizar mas tarde",
+        "error": error  || error.message
+        });
+    };
 };
 
-// DELETE
+//Delete User
 
-export const deleteUserById = async(request, response) => {
-
-try {
-    const idForDelete= request.params._id;
-   
-    await userModel.findByIdAndDelete(idForDelete);
-    return response.status(200).json({"mensaje": "Usuario eliminado con exito"})
+export const deleteUserById = async(req, res) => {
+    try {
+        const idForDelete= req.params._id;
     
-   } catch (error) {
-    return response.status(500).json({ "mensaje": "Intenta eliminar tu cuenta mas tarde",
-    "error": error  || error.message
-    });
-   };
-    
+        await userModel.findByIdAndDelete(idForDelete);
+        return res.status(200).json({"mensaje": "Usuario eliminado con exito"})
+        
+    } catch (error) {
+        return res.status(500).json({ "mensaje": "Intenta eliminar tu cuenta mas tarde",
+        "error": error  || error.message
+        });
+    };
+        
 };

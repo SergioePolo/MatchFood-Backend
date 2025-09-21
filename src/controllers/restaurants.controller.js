@@ -2,37 +2,34 @@ import {restaurantsModel} from "../models/restaurants.models.js";
 
 // Create-Post
 
-export const postRestaurant = async (request, response) => {
+export const postRestaurant = async (req, res) => {
     try {
-        await restaurantsModel.create(request.body);
+        await restaurantsModel.create(req.body);
 
-        return response.status(201).json({
+        return res.status(201).json({
             "mensaje": "Restaurante creado correctamente"
         });
 
     } catch (error) {
-        return response.status(400).json({
+        return res.status(400).json({
             "mensaje": "Ocurrió un error al crear restaurante",
             "error": error.message || error 
         })
-
-
-
     }}
 
 // Read-Get
 
-export const getAllRestaurants = async (request, response) => {
+export const getAllRestaurants = async (req, res) => {
     try {
         const allRestaurants = await restaurantsModel.find().populate('ratingId');
 
-        return response.status(200).json({
+        return res.status(200).json({
             "mensaje": "Petición exitosa",
             "data": allRestaurants
         })
 
     } catch (error) {
-        return response.status(500).json({
+        return res.status(500).json({
             "mensaje": "Ocurrió un error al mostrar restaurantes",
             "error": error.message || error
         })
@@ -41,19 +38,23 @@ export const getAllRestaurants = async (request, response) => {
 
 // Update
 
-export const putRestaurantById = async (request, response) => {
+export const putRestaurantById = async (req, res) => {
     try {
-        const idForUpdate = request.params.id;
-        const dataForUpdate = request.body;
+        const idForUpdate = req.params.id;
+        const dataForUpdate = req.body;
+
+        if(req.file){
+            dataForUpdate.logo = `/uploads/restaurants/profilePictures/${req.restaurantId}/${req.file.filename}`;
+        }
 
         await restaurantsModel.findByIdAndUpdate(idForUpdate, dataForUpdate);
 
-        return response.status(200).json({
+        return res.status(200).json({
             "mensaje":"Restaurante actualizado exitosamente"
         });
 
     } catch (error) {
-        return response.status(500).json({
+        return res.status(500).json({
             "mensaje": "Ocurrió un error al actualizar restaurante",
             "error": error.message || error
         })
@@ -62,17 +63,17 @@ export const putRestaurantById = async (request, response) => {
 
 // Delete
 
-export const deleteRestaurantById = async (request, response) => {
+export const deleteRestaurantById = async (req, res) => {
     try {
-        const idForDelete = request.params.id;
+        const idForDelete = req.params.id;
         await restaurantsModel.findByIdAndDelete(idForDelete);
 
-        return response.status(200).json({
+        return res.status(200).json({
             "mensaje": "Restaurante eliminado exitosamente"
         });
 
     } catch (error) {
-        return response.status(500).json({
+        return res.status(500).json({
             "mensaje": "Ocurrió un error al eliminar restaurante",
             "error": error.message || error
         })
@@ -82,14 +83,14 @@ export const deleteRestaurantById = async (request, response) => {
 export const getAllRestaurantsByCity = async (req, res) =>{
     try {
         const city = req.params.id;
-        const response = await restaurantsModel.find({city: city});
+        const res = await restaurantsModel.find({city: city});
 
         return res.status(200).json({
-            data: response
+            data: res
         });
 
     } catch (error) {
-        return response.status(500).json({
+        return res.status(500).json({
             "mensaje": `Ocurrió un error al buscar los restaurants de la ciudad ${req.params.restaurant}`,
             "error": error.message || error
         })

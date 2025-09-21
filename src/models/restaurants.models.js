@@ -22,9 +22,8 @@ const restaurantSchema = new Schema({
         type: String,
         required: true
     },
-    image: {
+    logo: {
         type: String,
-        required: true
     },
     ratingId: {
         type: mongoose.Schema.Types.ObjectId,

@@ -1,8 +1,34 @@
 import { ratingModel } from '../models/rating.models.js';
+import path from 'path';
+import fs from 'fs';
 
 export const postRating = async ( req, res ) => {
     try {
-        await ratingModel.create(req.body);
+        const data = {...req.body, images: [], userId: req.params.id};
+        const newRating = await ratingModel.create(data);
+
+        const tempFolder = path.resolve('uploads/restaurants/tempFiles', data.userId.toString());
+        const newFolder = path.resolve('uploads/restaurants/ratings', newRating._id.toString());
+
+        if (!fs.existsSync(newFolder)) {
+                    fs.mkdirSync(newFolder, { recursive: true });
+                }
+        
+                if (fs.existsSync(tempFolder)) {
+                    const files = fs.readdirSync(tempFolder);
+        
+                    files.forEach(file => {
+                        const oldPath = path.join(tempFolder, file);
+                        const newPath = path.join(newFolder, file);
+        
+                        fs.renameSync(oldPath, newPath); 
+                        data.images.push(path.relative("uploads", newPath));
+                    });
+                    fs.rmdirSync(tempFolder);
+                }
+        
+                newRating.images = data.images;
+                await newRating.save();
 
         return res.status(200).json({
             msg:'La calificación ha sido creada con éxito'

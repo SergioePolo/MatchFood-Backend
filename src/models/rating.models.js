@@ -3,10 +3,10 @@ import mongoose from "mongoose";
 const {Schema} = mongoose;
 
 const ratingSchema = new Schema({
-    image:{
-        type: String
+    images:{
+        type: [String]
     },
-    comment:{
+    content:{
         type: String
     },
     rating:{
