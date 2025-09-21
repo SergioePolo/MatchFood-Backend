@@ -12,7 +12,7 @@ userRouter.get("/", getUser);
 //Update user
 userRouter.put(
     "/:id/:category/",
-    auth('Admin'),
+    auth('admin'),
     (req, res, next) => {
         req.uploadType = "userProfile";
         req.userId = req.params.id;

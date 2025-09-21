@@ -35,10 +35,10 @@ export const login = async (request, response) => {
       id: userFound._id,
       user: userFound.firstName,
     };
-    if (userFound.rol === "Admin") {
-      payload.Admin = true;
+    if (userFound.rol === "admin") {
+      payload.admin = true;
     } else {
-      payload.Admin = false;
+      payload.admin = false;
     }
 
     const token = await generateToken(payload);
