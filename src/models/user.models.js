@@ -43,10 +43,6 @@ const userSchema = new Schema({
         enum: ["Usuario", "Restaurante","Admin"],
         required: true
     },
-    userId:{
-        type: String,
-        required: true
-    }
 })
 
 export const userModel = mongoose.model("users", userSchema);

@@ -42,7 +42,6 @@ export const getUser = async (req, res)=> {
 //Update User
 
 export  const putUserById = async (req, res) => {
-    let codePass;
     try {
         const idForUpdate= req.params.id;
         const dataForUpdate= req.body;
@@ -69,17 +68,16 @@ export  const putUserById = async (req, res) => {
 //Delete User
 
 export const deleteUserById = async(req, res) => {
-
-try {
-    const idForDelete= req.params._id;
-   
-    await userModel.findByIdAndDelete(idForDelete);
-    return res.status(200).json({"mensaje": "Usuario eliminado con exito"})
+    try {
+        const idForDelete= req.params._id;
     
-   } catch (error) {
-    return res.status(500).json({ "mensaje": "Intenta eliminar tu cuenta mas tarde",
-    "error": error  || error.message
-    });
-   };
-    
+        await userModel.findByIdAndDelete(idForDelete);
+        return res.status(200).json({"mensaje": "Usuario eliminado con exito"})
+        
+    } catch (error) {
+        return res.status(500).json({ "mensaje": "Intenta eliminar tu cuenta mas tarde",
+        "error": error  || error.message
+        });
+    };
+        
 };

@@ -3,11 +3,11 @@ import mongoose from "mongoose";
 const {Schema} = mongoose;
 
 const postSchema = new Schema({
-    Image:{
-        type: String,
+    images:{
+        type: [String],
         required: true
     },
-    comment:{
+    content:{
         type: String,
     },
     userId: {

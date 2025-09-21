@@ -2,7 +2,7 @@ import express from "express";
 import { postUser, getUser, putUserById, deleteUserById } from "../controllers/user.controller.js";
 import { upload } from "../config/multer.js";
 export const userRouter = express.Router();
-
+import { auth } from '../middleware/auth.js';
 //Create user
 userRouter.post("/", postUser);
 
@@ -11,7 +11,8 @@ userRouter.get("/", getUser);
 
 //Update user
 userRouter.put(
-    "/:id/",
+    "/:id/:category/",
+    auth('Admin'),
     (req, res, next) => {
         req.uploadType = "userProfile";
         req.userId = req.params.id;

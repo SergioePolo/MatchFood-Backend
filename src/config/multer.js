@@ -20,8 +20,14 @@ const storage = multer.diskStorage({
                 case 'userProfile': 
                     insideFolder = path.join(UPLOADS_BASE,'users/profilePictures', req.userId);
                     break;
+                case 'restaurantProfile':
+                    insideFolder = path.join(UPLOADS_BASE, 'restaurants/profilePictures', req.restaurantId);
+                    break;
                 case 'userPost':
-                    insideFolder = path.join(UPLOADS_BASE, 'users/posts', req.userId, req.postId);
+                    insideFolder = path.join(UPLOADS_BASE, 'users/tempFiles', req.userId);
+                    break;
+                case 'ratingPost':
+                    insideFolder = path.join(UPLOADS_BASE, 'restaurants/tempFiles', req.userId);
                     break;
                 default:
                     return cb(new Error('Invalid upload type'));
