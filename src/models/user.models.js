@@ -40,7 +40,7 @@ const userSchema = new Schema({
     },
     rol: {
         type: String,
-        enum: ["Usuario", "Restaurante","Admin"],
+        enum: ["Usuario", "Restaurante","admin"],
         required: true
     },
 })
