@@ -1,5 +1,6 @@
 import {restaurantsModel} from "../models/restaurants.models.js";
-
+import path from "path";
+import fs from "fs";
 // Create-Post
 
 export const postRestaurant = async (req, res) => {
@@ -66,11 +67,29 @@ export const putRestaurantById = async (req, res) => {
 export const deleteRestaurantById = async (req, res) => {
     try {
         const idForDelete = req.params.id;
-        await restaurantsModel.findByIdAndDelete(idForDelete);
+        const restaurant = await restaurantsModel.findById(idForDelete);
+        const RESTAURANT_BASE = '../../uploads/';
+        let route = '';
+        let mediaFolders = [];
+
+        if(restaurant.profilePicture){
+            route = path.join(RESTAURANT_BASE, 'profilePictures', restaurant._id.toString());
+            if(fs.existsSync(route)){
+                fs.rmdirSync(route, {recursive: true, force: true});
+            }
+            mediaFolders.push('Imagen de perfil eliminada');
+        }
+
+        //posts
+
+        //ratings
+        
+
+        /* await restaurantsModel.findByIdAndDelete(idForDelete);
 
         return res.status(200).json({
             "mensaje": "Restaurante eliminado exitosamente"
-        });
+        }); */
 
     } catch (error) {
         return res.status(500).json({

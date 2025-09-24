@@ -12,7 +12,7 @@ if (!secretkey) {
 
 export const generateToken = async (payload) => {
     return new Promise((resolve, reject) => {
-        jsonwebtoken.sign(payload, SECRET_KEY, { expiresIn: "30min" }, (error, token) => {
+        jsonwebtoken.sign(payload, secretkey, { expiresIn: "30min" }, (error, token) => {
             if (error) {
                 reject(new Error("Error al generar el JWT: " + error.message));
             } else {
@@ -24,7 +24,7 @@ export const generateToken = async (payload) => {
 
 export const verifyToken = async (token) => {
     return new Promise((resolve, reject) => {
-        jsonwebtoken.verify(token, SECRET_KEY, (error, decoded) => {
+        jsonwebtoken.verify(token, secretkey, (error, decoded) => {
             if (error) {
                 reject(new Error("Error al verificar el JWT: " + error.message));
             } else {

@@ -4,7 +4,7 @@ import { upload } from '../config/multer.js';
 import { auth } from '../middleware/auth.js';
 export const postRouter = express.Router();
 
-postRouter.post ('/:id', 
+postRouter.post ('/:id', auth('user'),
     (req, res, next)=>{
         req.uploadType = 'userPost';
         req.userId = req.params.id;
@@ -16,9 +16,16 @@ postRouter.post ('/:id',
 
 postRouter.get ('/',getPosts);
 
-postRouter.put ('/:id', auth(''), updatePostById);
+postRouter.put ('/:id', auth('user'),
+    (req, res, next)=>{
+        req.uploadType = 'userPost';
+        req.userId = req.params.id;
+        next();
+    },
+    upload.array('images', 5),
+    updatePostById);
 
-postRouter.delete ('/:id', auth(''), deletePostById);
+postRouter.delete ('/:id', auth('user'), deletePostById);
 
 postRouter.get('/postsByUser/:id', getAllPostByUser);
 

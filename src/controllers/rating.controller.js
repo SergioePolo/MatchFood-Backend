@@ -77,8 +77,12 @@ export const putRatingById = async ( req, res ) => {
 export const deleteRatingById = async ( req, res ) => {
     try {
         const idToDelete = req.params.id;
-
         await ratingModel.findByIdAndDelete(idToDelete);
+        const POST_BASE = path.join('uploads/restaurants/ratings', idToDelete);
+
+        if(fs.existsSync(POST_BASE)){
+            fs.rmdirSync(POST_BASE, {recursive: true, force: true});
+        }
 
         return res.status(200).json({
             msg: 'La calificación fue eliminada con éxito'

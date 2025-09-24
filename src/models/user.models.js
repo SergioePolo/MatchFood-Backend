@@ -26,7 +26,7 @@ const userSchema = new Schema({
     city:{
         type:String,
         required: true
-    },   
+    },
     categories:{
         type:String,
         enum: ["carne", "pescado", "pollo"],
@@ -38,9 +38,9 @@ const userSchema = new Schema({
     profilePicture: {
         type: String,
     },
-    rol: {
+    role: {
         type: String,
-        enum: ["Usuario", "Restaurante","admin"],
+        enum: ["user", "restaurant","admin"],
         required: true
     },
 })

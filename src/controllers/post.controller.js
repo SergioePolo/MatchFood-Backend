@@ -31,8 +31,7 @@ export const createPost = async (req, res) => {
         await newPost.save();
 
         return res.status(200).json({
-            msg: "La publicación ha sido creada con éxito",
-            post: newPost
+            msg: "La publicación ha sido creada con éxito"
         });
 
     } catch (error) {
@@ -83,8 +82,12 @@ export const updatePostById = async (req, res) => {
 export const deletePostById = async (req, res) => {
     try {
         const idToDelete = req.params.id;
-
         await postsModel.findByIdAndDelete(idToDelete);
+        const POST_BASE = path.join('uploads/users/posts', idToDelete);
+
+        if(fs.existsSync(POST_BASE)){
+            fs.rmdirSync(POST_BASE, {recursive: true, force: true});
+        }
 
         return res.status(200).json({
         msg: "La publicación fue eliminada con exito",
