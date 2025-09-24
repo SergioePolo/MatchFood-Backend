@@ -1,5 +1,5 @@
 import { userModel } from "../models/user.models.js";
-import { generateToken } from "..config/jwt.js";
+import { generateToken } from "../config/jwt.js";
 import bcryptjs from "bcryptjs";
 
 export const login = async (request, response) => {
@@ -34,12 +34,8 @@ export const login = async (request, response) => {
     const payload = {
       id: userFound._id,
       user: userFound.firstName,
+      role: userFound.role
     };
-    if (userFound.rol === "admin") {
-      payload.admin = true;
-    } else {
-      payload.admin = false;
-    }
 
     const token = await generateToken(payload);
 

@@ -12,11 +12,12 @@ import { ratingRouter } from "./src/routes/rating.routes.js";
 import { loginRouter } from "./src/routes/login.routes.js";
 
 const app = express();
-  dotenv.config();
+dotenv.config();
 const port= process.env.PORT
 mongooseConection();
 const _filename = fileURLToPath(import.meta.url); 
 const _dirname = path.dirname(_filename);
+
 app.get('/', (req, res) => {
   res.send('Hello World')
 })
@@ -28,7 +29,8 @@ app.use("/restaurant", restaurantRouter);
 app.use('/post', postRouter);
 app.use('/rating', ratingRouter);
 app.use('/uploads', express.static(path.join(_dirname,'../uploads')));
-app.use('/login', loginRouter)
+app.use('/login', loginRouter);
+
 app.listen(port,() =>{
     console.log (`Servidor escuchando en http://localhost:${port}`);
 });

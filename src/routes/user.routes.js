@@ -7,12 +7,12 @@ import { auth } from '../middleware/auth.js';
 userRouter.post("/", postUser);
 
 //Show all Users
-userRouter.get("/", getUser);
+userRouter.get("/", auth('admin'), getUser);
 
 //Update user
 userRouter.put(
-    "/:id/:category/",
-    auth('admin'),
+    "/:id",
+    auth('user'),
     (req, res, next) => {
         req.uploadType = "userProfile";
         req.userId = req.params.id;
@@ -23,4 +23,4 @@ userRouter.put(
 );
 
 //Delete user
-userRouter.delete("/:_id", deleteUserById);
+userRouter.delete("/:id",auth('user'), deleteUserById);
