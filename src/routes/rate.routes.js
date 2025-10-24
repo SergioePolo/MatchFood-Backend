@@ -1,5 +1,5 @@
 import express from 'express';
-import { postRate, getAllRate, putRateById, deleteRateById } from '../controllers/rate.controller.js';
+import { postRate, getAllRates, putRateById, deleteRateById } from '../controllers/rate.controller.js';
 import { auth } from '../middleware/auth.js';
 import { upload } from '../config/multer.js';
 
