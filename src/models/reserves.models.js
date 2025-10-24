@@ -4,17 +4,17 @@ const {Schema} = mongoose;
 
 const reserveSchema = new Schema({
  
-    fecha:{
+    date:{
         type: String,
         required: true
     },
 
-    hora:{
+    hour:{
         type: String,
         required: true
     },
 
-    personas:{
+    people:{
         type: Number,
         required: true
     },
@@ -29,6 +29,11 @@ const reserveSchema = new Schema({
         ref:"restaurants",
         required: true
     },
+
+    comments:{
+        type: String,
+    },
+
 
 }, {
     timestamps: true 
