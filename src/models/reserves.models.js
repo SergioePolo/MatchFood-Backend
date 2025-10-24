@@ -2,14 +2,23 @@ import mongoose from "mongoose";
 
 const {Schema} = mongoose;
 
-const postSchema = new Schema({
-    images:{
-        type: [String],
+const reserveSchema = new Schema({
+ 
+    fecha:{
+        type: String,
         required: true
     },
-    content:{
+
+    hora:{
         type: String,
+        required: true
     },
+
+    personas:{
+        type: Number,
+        required: true
+    },
+
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "users",
@@ -20,9 +29,9 @@ const postSchema = new Schema({
         ref:"restaurants",
         required: true
     },
-  
+
 }, {
     timestamps: true 
 })
 
-export const postsModel = mongoose.model("posts", postSchema);
+export const reservesModel = mongoose.model("reserves", reserveSchema);

@@ -21,7 +21,7 @@ export const postRestaurant = async (req, res) => {
         })
     }}
 
-// Read-Get
+// Get
 
 export const getAllRestaurants = async (req, res) => {
     try {

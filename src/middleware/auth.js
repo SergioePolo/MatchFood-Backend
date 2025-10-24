@@ -4,7 +4,7 @@ import { verifyToken } from "../config/jwt.js";
 export const auth = (requiredRole) => { 
     return async (request, response, next) => {
         const token = request.headers["authorization"];
-        
+        console.log("Token recibido en el middleware de autenticación:", token);
         if (!token) {
             return response.status(401).json({
               mensaje: "No se encontró token, permiso denegado",
@@ -24,6 +24,10 @@ export const auth = (requiredRole) => {
           
           if(requiredRole === "user" && decoded.role !== "user"){
             if(decoded.role !== "admin"){
+        console.log("Decoded token:", decoded);
+        request.user = decoded; 
+
+          if(requiredRole === "admin" && decoded.admin === false){
               return response.status(403).json({
                 "mensaje": "Acceso no permitido, no eres el usuario o administrador del sistema"
               });

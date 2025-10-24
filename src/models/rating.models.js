@@ -23,10 +23,8 @@ const ratingSchema = new Schema({
         ref:"restaurants",
         required: true
     },
-    createdAt: {
-        type: Date,
-        default: Date.now
-    }
+}, {
+    timestamps: true 
 })
 
 export const ratingModel = mongoose.model("restaurantRatings", ratingSchema);
