@@ -10,7 +10,8 @@ import {restaurantRouter} from "./src/routes/restaurants.routes.js";
 import { postRouter } from "./src/routes/post.routes.js";
 import { ratingRouter } from "./src/routes/rating.routes.js";
 import { loginRouter } from "./src/routes/login.routes.js";
-import { reserveRouter} from "./src/routes/reserves.routes.js";
+import { reserveRouter } from "./src/routes/reserves.routes.js";
+import { rateRouter } from "./src/routes/rate.routes.js";
 
 const app = express();
   dotenv.config();
