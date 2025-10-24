@@ -5,7 +5,7 @@ export const auth = (requiredRole) => {
     return async (request, response, next) => {
         const category = request.params.category;
         const token = request.headers["authorization"];
-        
+        console.log("Token recibido en el middleware de autenticación:", token);
         if (!token) {
             return response.status(401).json({
               mensaje: "No se encontró token, permiso denegado",
@@ -15,6 +15,9 @@ export const auth = (requiredRole) => {
 
     try {
         const decoded = await verifyToken(allowedToken);
+        console.log("Decoded token:", decoded);
+        request.user = decoded; 
+
           if(requiredRole === "admin" && decoded.admin === false){
               return response.status(403).json({
                   "mensaje": "Acceso no permitido, no eres administrador"

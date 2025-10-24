@@ -10,6 +10,7 @@ import {restaurantRouter} from "./src/routes/restaurants.routes.js";
 import { postRouter } from "./src/routes/post.routes.js";
 import { ratingRouter } from "./src/routes/rating.routes.js";
 import { loginRouter } from "./src/routes/login.routes.js";
+import { reserveRouter} from "./src/routes/reserves.routes.js";
 
 const app = express();
   dotenv.config();
@@ -29,6 +30,7 @@ app.use('/post', postRouter);
 app.use('/rating', ratingRouter);
 app.use('/uploads', express.static(path.join(_dirname,'../uploads')));
 app.use('/login', loginRouter)
+app.use('/reserves', reserveRouter);
 app.listen(port,() =>{
     console.log (`Servidor escuchando en http://localhost:${port}`);
 });

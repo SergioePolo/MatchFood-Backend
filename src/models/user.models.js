@@ -40,9 +40,14 @@ const userSchema = new Schema({
     },
     rol: {
         type: String,
-        enum: ["Usuario", "Restaurante","admin"],
+        enum: ["usuario", "restaurante","admin"],
         required: true
     },
+
+}, {
+    timestamps: true 
 })
+
+
 
 export const userModel = mongoose.model("users", userSchema);
