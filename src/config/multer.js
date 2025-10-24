@@ -66,3 +66,4 @@ const limits = {
 };
 
 export const upload = multer({ storage, fileFilter, limits });
+export { UPLOADS_BASE };

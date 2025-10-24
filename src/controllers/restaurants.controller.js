@@ -1,5 +1,9 @@
 import {restaurantsModel} from "../models/restaurants.models.js";
-
+import { postsModel } from "../models/posts.models.js";
+import { ratingModel } from "../models/rating.models.js";
+import path from "path";
+import fs from "fs";
+import { UPLOADS_BASE } from "../config/multer.js";
 // Create-Post
 
 export const postRestaurant = async (req, res) => {
@@ -66,11 +70,47 @@ export const putRestaurantById = async (req, res) => {
 export const deleteRestaurantById = async (req, res) => {
     try {
         const idForDelete = req.params.id;
+        const restaurant = await restaurantsModel.findById(idForDelete);
+        const posts = await postsModel.find({userId: idForDelete});
+        const ratings = await ratingModel.find({userId: idForDelete});
+        let route = '';
+        let mediaFolders = [];
+
         await restaurantsModel.findByIdAndDelete(idForDelete);
 
-        return res.status(200).json({
-            "mensaje": "Restaurante eliminado exitosamente"
-        });
+        /* if(restaurant.profilePicture){
+            route = path.join(UPLOADS_BASE, 'restaurants','profilePictures', restaurant._id.toString());
+            if(fs.existsSync(route)){
+                fs.rmdirSync(route, {recursive: true, force: true});
+            }
+            mediaFolders.push('Imagen de perfil eliminada');
+        }
+
+        // Posts
+        if(posts){
+            for (element of posts){
+                await postsModel.findByIdAndDelete(element._id.toString());
+                route = path.join(UPLOADS_BASE,'users', 'posts',element._id.toString());
+                if(fs.existsSync(route)){
+                    fs.rmdirSync(route, {recursive: true, force: true});
+                }
+            }
+            mediaFolders.push('posts eliminados');
+        }
+        
+        //ratings
+        if(ratings){
+            for (element of ratings){
+                route = path.join(UPLOADS_BASE,'restaurants', 'ratings',element._id.toString());
+                if(fs.existsSync(route)){
+                    fs.rmdirSync(route, {recursive: true, force: true});
+                }
+            }
+            mediaFolders.push('Ratings eliminados');
+        }
+                
+        return res.status(200).json({msg: 'Usuario eliminado con éxito, se elimino la siguiente información', data: mediaFolders}) */
+        return res.status(200).json({msg: 'Usuario eliminado con éxito'});
 
     } catch (error) {
         return res.status(500).json({

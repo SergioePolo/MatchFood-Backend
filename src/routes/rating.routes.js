@@ -5,7 +5,7 @@ import { auth } from '../middleware/auth.js';
 
 export const ratingRouter = express.Router();
 
-ratingRouter.post('/:id',
+ratingRouter.post('/:id',auth('user'),
     (req, res, next) => {
         req.uploadType = 'ratingPost';
         req.userId = req.params.id;
@@ -16,6 +16,6 @@ ratingRouter.post('/:id',
 
 ratingRouter.get('/', getAllRatings);
 
-ratingRouter.put('/:id', auth(''), putRatingById);
+ratingRouter.put('/:id', auth('user'), putRatingById);
 
-ratingRouter.delete('/:id', auth(''), deleteRatingById);
+ratingRouter.delete('/:id', auth('user'), deleteRatingById);
