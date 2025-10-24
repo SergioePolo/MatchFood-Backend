@@ -1,4 +1,4 @@
-import {rateModel} from '../models/rate.model.js';
+import {rateModel} from '../models/rate.models.js';
 import path from 'path';
 import fs from 'fs';
 

@@ -3,16 +3,16 @@ import { reservesModel } from "../models/reserves.models.js";
 // Post
 export const postReserve = async (req, res) => {
     try {
-        const { fecha, hora, personas, restaurantId } = req.body;
+        const { date, hour, people, restaurantId, comments } = req.body;
         const userId = req.user.id; 
 
-        if (!fecha || !hora || !personas || !restaurantId) {
+        if (!date || !hour || ! people || !restaurantId) {
             return res.status(400).json({
                 "mensaje": "Todos los campos son requeridos"
             });
         }
 
-        const reservaExistente = await reservesModel.findOne({ fecha, hora, restaurantId });
+        const reservaExistente = await reservesModel.findOne({ date, hour, restaurantId });
         if (reservaExistente) {
           return res.status(400).json({
             mensaje: "Ya existe una reserva en esa fecha y hora para este restaurante"
@@ -20,9 +20,9 @@ export const postReserve = async (req, res) => {
         }
 
         const infoReserva = {
-            fecha,
-            hora,
-            personas,
+            date,
+            hour,
+            people,
             restaurantId,
             userId  
         };

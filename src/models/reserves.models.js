@@ -23,7 +23,9 @@ const reserveSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "users",
         required: true
+
     },
+
     restaurantId: {
         type: mongoose.Schema.Types.ObjectId,
         ref:"restaurants",

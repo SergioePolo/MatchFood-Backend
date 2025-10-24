@@ -15,4 +15,4 @@ const rateSchema = new Schema({
     
 }, { timestamps: true });
 
-export const Rate = mongoose.model("Rate", rateSchema);
+export const rateModel = mongoose.model("rate", rateSchema);
