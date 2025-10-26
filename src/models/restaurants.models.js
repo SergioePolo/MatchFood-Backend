@@ -29,9 +29,18 @@ const restaurantSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref:"restaurantRatings",
     },
- 
-}, {
-    timestamps: true 
+    password:{
+        type: String,
+        required: true
+    },
+    email:{
+        type: String,
+        required: true
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    }
 })
 
 export const restaurantsModel = mongoose.model("restaurants", restaurantSchema);

@@ -1,6 +1,7 @@
 import {restaurantsModel} from "../models/restaurants.models.js";
 import { postsModel } from "../models/posts.models.js";
 import { ratingModel } from "../models/rating.models.js";
+import bcryptjs from "bcryptjs";
 import path from "path";
 import fs from "fs";
 import { UPLOADS_BASE } from "../config/multer.js";
@@ -8,7 +9,15 @@ import { UPLOADS_BASE } from "../config/multer.js";
 
 export const postRestaurant = async (req, res) => {
     try {
-        await restaurantsModel.create(req.body);
+        const { password } = req.body;
+        const codePass = await bcryptjs.hash(password,10);
+
+        const newRestaurant = {
+            ...req.body,
+            password: codePass
+        }
+
+        await restaurantsModel.create(newRestaurant);
 
         return res.status(201).json({
             "mensaje": "Restaurante creado correctamente"
@@ -77,7 +86,6 @@ export const deleteRestaurantById = async (req, res) => {
         let mediaFolders = [];
 
         await restaurantsModel.findByIdAndDelete(idForDelete);
-
         /* if(restaurant.profilePicture){
             route = path.join(UPLOADS_BASE, 'restaurants','profilePictures', restaurant._id.toString());
             if(fs.existsSync(route)){
