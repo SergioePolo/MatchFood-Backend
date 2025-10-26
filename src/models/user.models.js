@@ -27,7 +27,7 @@ const userSchema = new Schema({
         type:String,
         required: true
     },
-    categories:{
+    preferences:{
         type:String,
         enum: ["carne", "pescado", "pollo"],
     },

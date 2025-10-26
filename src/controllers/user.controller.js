@@ -9,7 +9,6 @@ import { UPLOADS_BASE } from "../config/multer.js";
 //CreateUser
 export const postUser = async (req, res) => {
 try { 
-
     const { password } = req.body;
     
     const codePass= await bcryptjs.hash(password, 10);
@@ -49,7 +48,7 @@ export  const putUserById = async (req, res) => {
     try {
         const idForUpdate= req.params.id;
         const dataForUpdate= req.body;
-
+        console.log("entre")
         if(dataForUpdate.password){
             dataForUpdate.password = await bcryptjs.hash(dataForUpdate.password, 10);
         }

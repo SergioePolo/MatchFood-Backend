@@ -1,22 +1,29 @@
 import { userModel } from "../models/user.models.js";
+import { restaurantsModel } from "../models/restaurants.models.js";
 import { generateToken } from "../config/jwt.js";
 import bcryptjs from "bcryptjs";
 
 export const login = async (request, response) => {
   try {
-    const { emailLogin, passwordLogin } = request.body;
+    const { emailLogin, passwordLogin, role } = request.body;
+    let userFound = "";
+    let payload = "";
+    if (role === "user") {
+      userFound = await userModel.findOne({
+        email: emailLogin,
+      });
+    } else {
+      userFound = await restaurantsModel.findOne({
+        email: emailLogin,
+      });
+    }
 
-    const userFound = await userModel.findOne({
-      email: emailLogin,
-    });
-
+    
     if (!userFound) {
-      return response
-        .status(404)
-        .json({
-          mensaje:
-            "Estas a tiempo de registrarte en MatchFood y descurbrir cientos de restuarantes en tu zona",
-        });
+      return response.status(404).json({
+        mensaje:
+          "Estas a tiempo de registrarte en MatchFood y descurbrir cientos de restuarantes en tu zona",
+      });
     }
 
     const validPassword = await bcryptjs.compare(
@@ -24,18 +31,25 @@ export const login = async (request, response) => {
       userFound.password
     );
     if (!validPassword) {
-      return response
-        .status(401)
-        .json({
-          mensaje: "Contraseña incorrecta, por favor intentalo de nuevo",
-        });
+      return response.status(401).json({
+        mensaje: "Contraseña incorrecta, por favor intentalo de nuevo",
+      });
+    }
+    if(role === 'user'){
+      payload = {
+        id: userFound._id,
+        user: userFound.firstName,
+        role: userFound.role,
+      };
+    }
+    else{
+      payload = {
+        id: userFound._id,
+        user: userFound.name,
+        role: 'restaurant',
+      };
     }
 
-    const payload = {
-      id: userFound._id,
-      user: userFound.firstName,
-      role: userFound.role
-    };
 
     const token = await generateToken(payload);
 

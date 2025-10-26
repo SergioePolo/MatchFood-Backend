@@ -6,11 +6,11 @@ import { auth } from '../middleware/auth.js';
 export const ratingRouter = express.Router();
 
 ratingRouter.post('/:id',auth('user'),
-    (req, res, next) => {
+/*     (req, res, next) => {
         req.uploadType = 'ratingPost';
         req.userId = req.params.id;
         next();
-    },
+    }, */
     upload.array('images',3),
     postRating);
 
