@@ -11,7 +11,7 @@ const restaurantSchema = new Schema({
         type: String,
     },
     city:{
-        type: String,
+        type: String,   
         required: true
     },
     address: {

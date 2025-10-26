@@ -48,7 +48,6 @@ export  const putUserById = async (req, res) => {
     try {
         const idForUpdate= req.params.id;
         const dataForUpdate= req.body;
-        console.log("entre")
         if(dataForUpdate.password){
             dataForUpdate.password = await bcryptjs.hash(dataForUpdate.password, 10);
         }
@@ -78,53 +77,53 @@ export const deleteUserById = async(req, res) => {
         const ratings = await ratingModel.find({userId: idForDelete});
         let route = '';
         let mediaFolders = [];
-        
-        await userModel.findByIdAndDelete(idForDelete);
+
         // profilePictures
-        /* if(user.profilePicture){
+        if(user.profilePicture){
             route = path.join(UPLOADS_BASE,"users", "profilePictures", user._id.toString());
-            if(fs.existsSync(route)){
-                fs.rmdirSync(route, {recursive: true, force: true});
-            }
-            console.log("realizado perfil");
-            mediaFolders.push('Imagen de perfil eliminada');
+            if (!fs.existsSync(route)) {
+                // No agregamos mensaje si no existe
+            } else {
+                fs.rmdirSync(route, { recursive: true, force: true });
+                mediaFolders.push('Imagen de perfil eliminada');
+            };
         }
         
         // Posts
-        if(posts.length > 0){
-            console.log("entre post")
-            for (let element of posts){
+        if (posts.length > 0) {
+            for (const element of posts) {
                 await postsModel.findByIdAndDelete(element._id.toString());
-                route = path.join(UPLOADS_BASE,'users', 'posts',element._id.toString());
-                if(fs.existsSync(route)){
-                    fs.rmdirSync(route, {recursive: true, force: true});
+                route = path.join(UPLOADS_BASE, 'users', 'posts', element._id.toString());
+                if (fs.existsSync(route)) {
+                    fs.rmdirSync(route, { recursive: true, force: true });
                 }
             }
-            console.log("realizado posts");
-            mediaFolders.push('posts eliminados');
-        }
-        
-
-        //ratings
-        if(ratings.length > 0){
-            console.log("entre rating")
-            for (let element of ratings){
-                await ratingModel.findByIdAndDelete(element._id.toString());
-                route = path.join(UPLOADS_BASE,'restaurants', 'ratings',element._id.toString());
-                if(fs.existsSync(route)){
-                    fs.rmdirSync(route, {recursive: true, force: true});
+            mediaFolders.push('Posts eliminados');
+        }        
+        // Ratings
+        if (ratings.length > 0) {
+            for (const element of ratings) {
+                route = path.join(UPLOADS_BASE, 'restaurants', 'ratings', element._id.toString());
+                if (fs.existsSync(route)) {
+                    fs.rmdirSync(route, { recursive: true, force: true });
                 }
             }
-            console.log("realizado ratings");
             mediaFolders.push('Ratings eliminados');
         }
-        
-        return res.status(200).json({msg: 'Usuario eliminado con éxito, se elimino la siguiente información', data: mediaFolders}) */
-        return res.status(200).json({msg: 'Usuario eliminado con éxito'});
+        // Eliminar restaurante al final de todo
+        await restaurantsModel.findByIdAndDelete(idForDelete);
+
+        // Respuesta: solo enviar el array si hay contenido
+        const response = { msg: 'Usuario eliminado con éxito' };
+        if (mediaFolders.length > 0) {
+            response.data = mediaFolders;
+        }
+        return res.status(200).json(response);
+
     } catch (error) {
-        return res.status(500).json({ "mensaje": "Intenta eliminar tu cuenta mas tarde",
-        "error": error  || error.message
+        return res.status(500).json({
+            mensaje: "Ocurrió un error al eliminar el usuario",
+            error: error.message || error
         });
-    };
-        
-};
+    }
+}

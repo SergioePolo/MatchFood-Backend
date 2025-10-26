@@ -4,13 +4,13 @@ export const auth = (requiredRole) => {
     return async (request, response, next) => {
         const token = request.headers["authorization"];
         console.log("Token recibido en el middleware de autenticación:", token);
-        
+
         if (!token) {
             return response.status(401).json({
-                mensaje: "No se encontró token, permiso denegado",
+                msg: "No se encontró token, permiso denegado",
             });
         }
-        
+
         const allowedToken = token.split(" ")[1];
 
         try {
@@ -18,43 +18,30 @@ export const auth = (requiredRole) => {
             console.log("Decoded token:", decoded);
             request.user = decoded;
 
-            // Verificar rol de restaurante
-            if (requiredRole === "restaurant" && decoded.role !== "restaurant") {
-                if (decoded.role !== "admin") {
-                    return response.status(403).json({
-                        "mensaje": "Acceso no permitido, no eres el dueño del restaurante o administrador del sistema"
-                    });
-                }
-            }
-            
-            // Verificar rol de usuario
-            if (requiredRole === "user" && decoded.role !== "user") {
-                if (decoded.role !== "admin") {
-                    return response.status(403).json({
-                        "mensaje": "Acceso no permitido, no eres el usuario o administrador del sistema"
-                    });
-                }
+            // Los admins tienen acceso a todo
+            if (decoded.role === "admin") {
+                return next();
             }
 
-            // Verificar rol de admin
-            if (requiredRole === "admin" && decoded.admin === false) {
+
+            if (requiredRole && decoded.role !== requiredRole) {
                 return response.status(403).json({
-                    "mensaje": "Acceso no permitido, no eres administrador del sistema"
+                    msg: 'Acceso no permitido. Requieres tener rol de: ${requiredRole}',
                 });
             }
+
+            next();
 
         } catch (error) {
             if (error.name === "TokenExpiredError") {
                 return response.status(401).json({
-                    mensaje: "El token ha expirado, inicia sesión nuevamente",
+                    msg: "El token ha expirado, inicia sesión nuevamente",
                 });
             }
-            
+
             return response.status(401).json({
-                mensaje: "Falló la autenticación: Token no permitido",
+                msg: "Falló la autenticación: Token no permitido",
             });
         }
-        
-        next();
     };
-}
+} 
