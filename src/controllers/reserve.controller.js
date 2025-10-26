@@ -45,7 +45,7 @@ export const postReserve = async (req, res) => {
 export const getAllReserves = async (req, res) => {
     try {
         const allReserves = await reservesModel.find()
-            .populate('userId', 'name email')
+            .populate('userId', 'firstName lastName email')
             .populate('restaurantId', 'name address');
 
         return res.status(200).json({

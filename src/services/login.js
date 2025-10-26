@@ -18,7 +18,6 @@ export const login = async (request, response) => {
       });
     }
 
-    
     if (!userFound) {
       return response.status(404).json({
         mensaje:
@@ -35,21 +34,21 @@ export const login = async (request, response) => {
         mensaje: "Contraseña incorrecta, por favor intentalo de nuevo",
       });
     }
-    if(role === 'user'){
+    if (role === "user") {
       payload = {
         id: userFound._id,
         user: userFound.firstName,
         role: userFound.role,
+        restaurantId: userFound.restaurantId,
       };
-    }
-    else{
+    } else {
       payload = {
-        id: userFound._id,
+        id: userFound._id,          
         user: userFound.name,
         role: 'restaurant',
+        restaurantId: userFound._id
       };
     }
-
 
     const token = await generateToken(payload);
 
