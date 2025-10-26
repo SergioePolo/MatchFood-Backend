@@ -77,56 +77,66 @@ export const putRestaurantById = async (req, res) => {
 // Delete
 
 export const deleteRestaurantById = async (req, res) => {
-    try {
-        const idForDelete = req.params.id;
-        const restaurant = await restaurantsModel.findById(idForDelete);
-        const posts = await postsModel.find({userId: idForDelete});
-        const ratings = await ratingModel.find({userId: idForDelete});
-        let route = '';
-        let mediaFolders = [];
+  try {
+    const idForDelete = req.params.id;
+    const restaurant = await restaurantsModel.findById(idForDelete);
+    const posts = await postsModel.find({ userId: idForDelete });
+    const ratings = await ratingModel.find({ userId: idForDelete });
+    let route = '';
+    let mediaFolders = [];
 
-        await restaurantsModel.findByIdAndDelete(idForDelete);
-        /* if(restaurant.profilePicture){
-            route = path.join(UPLOADS_BASE, 'restaurants','profilePictures', restaurant._id.toString());
-            if(fs.existsSync(route)){
-                fs.rmdirSync(route, {recursive: true, force: true});
-            }
-            mediaFolders.push('Imagen de perfil eliminada');
-        }
-
-        // Posts
-        if(posts){
-            for (element of posts){
-                await postsModel.findByIdAndDelete(element._id.toString());
-                route = path.join(UPLOADS_BASE,'users', 'posts',element._id.toString());
-                if(fs.existsSync(route)){
-                    fs.rmdirSync(route, {recursive: true, force: true});
-                }
-            }
-            mediaFolders.push('posts eliminados');
-        }
-        
-        //ratings
-        if(ratings){
-            for (element of ratings){
-                route = path.join(UPLOADS_BASE,'restaurants', 'ratings',element._id.toString());
-                if(fs.existsSync(route)){
-                    fs.rmdirSync(route, {recursive: true, force: true});
-                }
-            }
-            mediaFolders.push('Ratings eliminados');
-        }
-                
-        return res.status(200).json({msg: 'Usuario eliminado con éxito, se elimino la siguiente información', data: mediaFolders}) */
-        return res.status(200).json({msg: 'Usuario eliminado con éxito'});
-
-    } catch (error) {
-        return res.status(500).json({
-            "mensaje": "Ocurrió un error al eliminar restaurante",
-            "error": error.message || error
-        })
+    // Imagen de perfil
+    if (restaurant.logo) {
+      route = path.join(UPLOADS_BASE, 'restaurants', 'profilePictures', restaurant._id.toString());
+      if (!fs.existsSync(route)) {
+        // No agregamos mensaje si no existe
+      } else {
+        fs.rmdirSync(route, { recursive: true, force: true });
+        mediaFolders.push('Imagen de perfil eliminada');
+      }
     }
+
+    // Posts
+    if (posts.length > 0) {
+      for (const element of posts) {
+        await postsModel.findByIdAndDelete(element._id.toString());
+        route = path.join(UPLOADS_BASE, 'users', 'posts', element._id.toString());
+        if (fs.existsSync(route)) {
+          fs.rmdirSync(route, { recursive: true, force: true });
+        }
+      }
+      mediaFolders.push('Posts eliminados');
+    }
+
+    // Ratings
+    if (ratings.length > 0) {
+      for (const element of ratings) {
+        route = path.join(UPLOADS_BASE, 'restaurants', 'ratings', element._id.toString());
+        if (fs.existsSync(route)) {
+          fs.rmdirSync(route, { recursive: true, force: true });
+        }
+      }
+      mediaFolders.push('Ratings eliminados');
+    }
+
+    // Eliminar restaurante al final de todo
+    await restaurantsModel.findByIdAndDelete(idForDelete);
+
+    // Respuesta: solo enviar el array si hay contenido
+    const response = { msg: 'Restaurante eliminado con éxito' };
+    if (mediaFolders.length > 0) {
+      response.data = mediaFolders;
+    }
+    return res.status(200).json(response);
+
+  } catch (error) {
+    return res.status(500).json({
+      mensaje: "Ocurrió un error al eliminar el restaurante",
+      error: error.message || error
+    });
+  }
 }
+
 
 export const getAllRestaurantsByCity = async (req, res) =>{
     try {

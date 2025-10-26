@@ -13,11 +13,11 @@ userRouter.get("/", auth('admin'), getUser);
 userRouter.put(
     "/:id",
     auth('user'),
-    /* (req, res, next) => {
+    (req, res, next) => {
         req.uploadType = "userProfile";
         req.userId = req.params.id;
         next();
-    }, */
+    },
     upload.single('profilePicture'),
     putUserById
 );

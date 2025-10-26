@@ -11,11 +11,11 @@ restaurantRouter.get("/", getAllRestaurants);
 
 //Put
 restaurantRouter.put("/:id",auth('restaurant'),
-/*     (req,res, next) => {
+    (req,res, next) => {
         req.uploadType = 'restaurantProfile';
         req.restaurantId = req.params.id;
         next();
-    }, */
+    },
     upload.single('logo'),
     putRestaurantById
 );
