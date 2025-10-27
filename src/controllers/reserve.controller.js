@@ -8,14 +8,14 @@ export const postReserve = async (req, res) => {
 
         if (!date || !hour || ! people || !restaurantId) {
             return res.status(400).json({
-                "mensaje": "Todos los campos son requeridos"
+                "mensaje": "Por favor diligencia todos los campos, son obligatorios"
             });
         }
 
         const reservaExistente = await reservesModel.findOne({ date, hour, restaurantId });
         if (reservaExistente) {
           return res.status(400).json({
-            mensaje: "Ya existe una reserva en esa fecha y hora para este restaurante"
+            mensaje: "Ya tienes una reserva para esa fecha y hora en este restaurante"
           });
         }
 
@@ -130,39 +130,55 @@ export const deleteReserveById = async (req, res) => {
 // Get reserves 
 export const getAllReservesByUser = async (req, res) => {
     try {
-        const userId = req.params.id;
-        const reserves = await reservesModel.find({ userId: userId })
-            .populate('restaurantId', 'name address logo');
-
-        return res.status(200).json({
-            "mensaje": "Petición exitosa",
-            "data": reserves
-        });
-
+      let reserves;
+  
+      if (req.user.role === "admin") {
+        // El admin ve todas las reservas de todos los usuarios
+        reserves = await reservesModel.find()
+          .populate('userId', 'firstName lastName email')
+          .populate('restaurantId', 'name address logo');
+      } else {
+        reserves = await reservesModel.find({ userId: req.user.id })
+          .populate('restaurantId', 'name address logo');
+      }
+  
+      return res.status(200).json({
+        mensaje: "Peticíon exitosa",
+        data: reserves
+      });
     } catch (error) {
-        return res.status(500).json({
-            "mensaje": `Ocurrió un error al buscar las reservas del usuario ${req.params.id}`,
-            "error": error.message || error
-        });
+      return res.status(500).json({
+        mensaje: "Ocurrió un error al buscar reservas",
+        error: error.message || error
+      });
     }
-}
+  };
 
 // Get reserves by restaurant
 export const getAllReservesByRestaurant = async (req, res) => {
     try {
-        const restaurantId = req.params.id;
-        const reserves = await reservesModel.find({ restaurantId: restaurantId })
-            .populate('userId', 'name email');
-
-        return res.status(200).json({
-            "mensaje": "Petición exitosa",
-            "data": reserves
+      const restaurantId = req.params.id;
+      const user = req.user;
+  
+      // El restaurante solo puede ver sus propias reservas
+      if (user.role === 'restaurant' && user.id !== restaurantId) {
+        return res.status(403).json({
+          mensaje: "No tienes permiso para ver las reservas de otro restaurante"
         });
-
+      }
+  
+      const reservas = await reservesModel.find({ restaurantId })
+        .populate('userId', 'firstName lastName email');
+  
+      return res.status(200).json({
+        mensaje: "Petición exitosa",
+        data: reservas
+      });
+  
     } catch (error) {
-        return res.status(500).json({
-            "mensaje": `Ocurrió un error al buscar las reservas del restaurante ${req.params.id}`,
-            "error": error.message || error
-        });
+      return res.status(500).json({
+        mensaje: "Error al obtener las reservas del restaurante",
+        error: error.message
+      });
     }
-}
+  };

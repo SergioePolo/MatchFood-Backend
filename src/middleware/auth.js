@@ -26,7 +26,7 @@ export const auth = (requiredRole) => {
 
             if (requiredRole && decoded.role !== requiredRole) {
                 return response.status(403).json({
-                    msg: 'Acceso no permitido. Requieres tener rol de: ${requiredRole}',
+                    msg: `Acceso no permitido. Requieres tener rol de: ${requiredRole}`,
                 });
             }
 
