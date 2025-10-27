@@ -8,8 +8,8 @@ reserveRouter.post("/crear", auth(''), postReserve);
 
 //Get
 reserveRouter.get("/mostrar", getAllReserves);
-reserveRouter.get('/mostrar/usuario/:id', auth(''), getAllReservesByUser);
-reserveRouter.get('/mostrar/restaurante/:id', auth(''), getAllReservesByRestaurant);
+reserveRouter.get('/mis-reservas', auth(''), getAllReservesByUser);
+reserveRouter.get('/restaurante/:id/reservas', auth('admin'), getAllReservesByRestaurant);
 
 //Put
 reserveRouter.put('/actualizar/:id', auth(''), updateReserveById);
