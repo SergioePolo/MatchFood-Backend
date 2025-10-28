@@ -41,11 +41,20 @@ export const login = async (request, response) => {
         role: userFound.role,
         restaurantId: userFound.restaurantId,
       };
-    } else {
+    } 
+    else if(role === "restaurant") {
       payload = {
         id: userFound._id,          
         user: userFound.name,
         role: 'restaurant',
+        restaurantId: userFound._id
+      };
+    }
+    else{
+      payload = {
+        id: userFound._id,          
+        user: userFound.name,
+        role: userFound.role,
         restaurantId: userFound._id
       };
     }
