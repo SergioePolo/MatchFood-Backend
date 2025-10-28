@@ -16,7 +16,7 @@ postRouter.post ('/:id', auth('user'),
 
 postRouter.get ('/',getPosts);
 
-postRouter.put ('/:id', auth('user'),
+postRouter.put ('/:id', auth('user', 'admin'),
 /*     (req, res, next)=>{
         req.uploadType = 'userPost';
         req.userId = req.params.id;
@@ -25,7 +25,7 @@ postRouter.put ('/:id', auth('user'),
     upload.array('images', 5),
     updatePostById);
 
-postRouter.delete ('/:id', auth('user'), deletePostById);
+postRouter.delete ('/:id', auth('user','admin' ), deletePostById);
 
 postRouter.get('/postsByUser/:id', getAllPostByUser);
 

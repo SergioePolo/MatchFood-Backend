@@ -24,7 +24,7 @@ rateRouter.put ('/:id', auth('user'), putRateById);
         next();
     },
 
-rateRouter.delete ('/:id', auth('user'), deleteRateById);   
+rateRouter.delete ('/:id', auth('user', 'admin'), deleteRateById);   
 
 rateRouter.get('/ratesByUser/:id', getAllRates);
 

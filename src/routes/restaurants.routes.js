@@ -7,7 +7,7 @@ import { auth } from '../middleware/auth.js';
 restaurantRouter.post("/", postRestaurant);
 
 //Get
-restaurantRouter.get("/", getAllRestaurants);
+restaurantRouter.get("/", getAllRestaurants, auth('admin'));
 
 //Put
 restaurantRouter.put("/:id",auth('restaurant'),
@@ -21,7 +21,7 @@ restaurantRouter.put("/:id",auth('restaurant'),
 );
 
 //Delete
-restaurantRouter.delete("/:id", auth('restaurant'), deleteRestaurantById);
+restaurantRouter.delete("/:id", auth('restaurant','admin'), deleteRestaurantById);
 
-restaurantRouter.get("/getByCity/:id", auth('restaurant'), getAllRestaurantsByCity);
+restaurantRouter.get("/getByCity/:id", auth('restaurant', 'admin'), getAllRestaurantsByCity);
 

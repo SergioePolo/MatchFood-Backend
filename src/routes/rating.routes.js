@@ -14,7 +14,7 @@ ratingRouter.post('/:id',auth('user'),
     upload.array('images',3),
     postRating);
 
-ratingRouter.get('/', getAllRatings);
+ratingRouter.get('/', getAllRatings, auth('admin'));
 
 ratingRouter.put('/:id', auth('user'), putRatingById);
 
