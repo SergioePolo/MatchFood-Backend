@@ -154,3 +154,18 @@ export const getAllRestaurantsByCity = async (req, res) =>{
         })
     }
 }
+
+export const getAllRestaurantById = async (req, res) =>{
+  try {
+    const restaurantId = req.params.id;
+    const restaurant = await restaurantsModel.findById(restaurantId);
+    return res.status(200).json({
+      data: restaurant
+    })
+  } catch (error) {
+    return res.status(500).json({
+            "mensaje": `Ocurrió un error al buscar el restaurante`,
+            "error": error.message || error
+        })
+  }
+}

@@ -1,5 +1,5 @@
 import express from "express";
-import { postRestaurant, getAllRestaurants, putRestaurantById, deleteRestaurantById, getAllRestaurantsByCity } from "../controllers/restaurants.controller.js";
+import { postRestaurant, getAllRestaurants, putRestaurantById, deleteRestaurantById, getAllRestaurantsByCity, getAllRestaurantById } from "../controllers/restaurants.controller.js";
 import { upload } from '../config/multer.js';
 export const restaurantRouter = express.Router();
 import { auth } from '../middleware/auth.js';
@@ -24,4 +24,6 @@ restaurantRouter.put("/:id",auth('restaurant'),
 restaurantRouter.delete("/:id", auth('restaurant','admin'), deleteRestaurantById);
 
 restaurantRouter.get("/getByCity/:id", auth('restaurant', 'admin'), getAllRestaurantsByCity);
+
+restaurantRouter.get("/getById/:id", getAllRestaurantById);
 
