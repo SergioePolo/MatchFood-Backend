@@ -31,7 +31,7 @@ app.use("/user", userRouter);
 app.use("/restaurant", restaurantRouter);
 app.use('/post', postRouter);
 app.use('/rating', ratingRouter);
-app.use('/uploads', express.static(path.join(_dirname,'../uploads')));
+app.use('/uploads', express.static(path.join(_dirname,'uploads')));
 app.use('/login', loginRouter);
 app.use('/rate', rateRouter);
 app.use('/reserves', reserveRouter);

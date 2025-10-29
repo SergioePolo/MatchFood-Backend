@@ -3,7 +3,6 @@ import { verifyToken } from "../config/jwt.js";
 export const auth = (requiredRole) => { 
     return async (request, response, next) => {
         const token = request.headers["authorization"];
-        console.log("Token recibido en el middleware de autenticación:", token);
 
         if (!token) {
             return response.status(401).json({
@@ -15,7 +14,6 @@ export const auth = (requiredRole) => {
 
         try {
             const decoded = await verifyToken(allowedToken);
-            console.log("Decoded token:", decoded);
             request.user = decoded;
 
             // Los admins tienen acceso a todo
