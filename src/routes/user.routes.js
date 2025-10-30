@@ -1,5 +1,5 @@
 import express from "express";
-import { postUser, getUser, putUserById, deleteUserById } from "../controllers/user.controller.js";
+import { postUser, getUser, putUserById, deleteUserById, getUserById } from "../controllers/user.controller.js";
 import { upload } from "../config/multer.js";
 export const userRouter = express.Router();
 import { auth } from '../middleware/auth.js';
@@ -24,3 +24,5 @@ userRouter.put(
 
 //Delete user
 userRouter.delete("/:id",auth('user'), deleteUserById);
+
+userRouter.get("/:id", auth('user'), getUserById);

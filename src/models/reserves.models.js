@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 const {Schema} = mongoose;
 
 const reserveSchema = new Schema({
- 
     date:{
         type: String,
         required: true

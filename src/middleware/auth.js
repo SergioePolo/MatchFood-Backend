@@ -3,7 +3,6 @@ import { verifyToken } from "../config/jwt.js";
 export const auth = (requiredRole) => { 
     return async (request, response, next) => {
         const token = request.headers["authorization"];
-
         if (!token) {
             return response.status(401).json({
                 msg: "No se encontró token, permiso denegado",
@@ -11,11 +10,11 @@ export const auth = (requiredRole) => {
         }
 
         const allowedToken = token.split(" ")[1];
-
+        
         try {
             const decoded = await verifyToken(allowedToken);
             request.user = decoded;
-
+            
             // Los admins tienen acceso a todo
             if (decoded.role === "admin") {
                 return next();

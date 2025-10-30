@@ -2,6 +2,7 @@ import { reservesModel } from "../models/reserves.models.js";
 
 // Post
 export const postReserve = async (req, res) => {
+  
     try {
         const { date, hour, people, restaurantId, comments } = req.body;
         const userId = req.user.id; 
@@ -24,7 +25,7 @@ export const postReserve = async (req, res) => {
             hour,
             people,
             restaurantId,
-            userId  
+            userId    
         };
 
         await reservesModel.create(infoReserva);
