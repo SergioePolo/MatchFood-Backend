@@ -27,7 +27,7 @@ app.get('/', (req, res) => {
 
 app.use(cors());
 app.use(express.json());
-app.use("/user", userRouter);
+app.use("/users", userRouter);
 app.use("/restaurant", restaurantRouter);
 app.use('/post', postRouter);
 app.use('/rating', ratingRouter);

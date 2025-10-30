@@ -9,6 +9,7 @@ import { UPLOADS_BASE } from "../config/multer.js";
 //CreateUser
 export const postUser = async (req, res) => {
 try { 
+    
     const { password } = req.body;
     
     const codePass= await bcryptjs.hash(password, 10);
@@ -18,8 +19,8 @@ try {
         password:codePass,
     }
 
-    await userModel.create(newUser);
-    return res.status (201).json({"mensaje": "Usuario creado, Bienvenido a MatchFood"})
+    const user = await userModel.create(newUser);
+    return res.status (201).json({"mensaje": "Usuario creado, Bienvenido a MatchFood", data: user._id.toString()})
 
     } catch (error) {
         return res.status(400).json({
@@ -57,7 +58,7 @@ export  const putUserById = async (req, res) => {
         }
         await userModel.findByIdAndUpdate(idForUpdate, dataForUpdate);
         return res.status (200).json ({
-            "mensaje": "Usuario Actualizado"
+            "mensaje": "Usuario Actualizado",
         });
         
     } catch (error) {
@@ -125,5 +126,28 @@ export const deleteUserById = async(req, res) => {
             mensaje: "Ocurrió un error al eliminar el usuario",
             error: error.message || error
         });
+    }
+}
+
+export const getUserById = async(req, res) =>{
+    const userId = req.params.id;
+
+    try {
+        const user = await userModel.findById(userId);
+        if(user){
+            return res.status(200).json({
+                data: user
+            });
+        }
+        else{
+            return res.status(404).json({
+                msg: 'Usuario no encontrado, por favor registrate en el sistema'
+            })
+        }
+    } catch (error) {
+        return res.status(400).json({
+            msg: 'Se presentó un error al momento de buscar el usuario',
+            error: error.message || error
+        })
     }
 }
