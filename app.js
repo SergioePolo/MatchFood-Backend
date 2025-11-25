@@ -12,7 +12,7 @@ import { ratingRouter } from "./src/routes/rating.routes.js";
 import { loginRouter } from "./src/routes/login.routes.js";
 import { rateRouter } from "./src/routes/rate.routes.js";
 import { reserveRouter } from "./src/routes/reserves.routes.js";
-
+import { adminDashboard } from "./src/controllers/admin.controller.js";
 
 const app = express();
 dotenv.config();
@@ -35,6 +35,8 @@ app.use('/uploads', express.static(path.join(_dirname,'uploads')));
 app.use('/login', loginRouter);
 app.use('/rate', rateRouter);
 app.use('/reserves', reserveRouter);
+app.use('/admin', adminDashboard);
+
 app.listen(port,() =>{
     console.log (`Servidor escuchando en http://localhost:${port}`);
 });
