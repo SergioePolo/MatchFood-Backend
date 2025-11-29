@@ -16,27 +16,41 @@ import { adminDashboard } from "./src/controllers/admin.controller.js";
 
 const app = express();
 dotenv.config();
-const port= process.env.PORT
+const port = process.env.PORT;
 mongooseConection();
 const _filename = fileURLToPath(import.meta.url); 
 const _dirname = path.dirname(_filename);
 
+// CORS should be first
+app.use(cors({
+    origin: 'http://localhost:4200', // Your Angular app URL
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+// Serve static files early
+app.use('/uploads', express.static(path.join(_dirname, 'uploads')));
+
 app.get('/', (req, res) => {
   res.send('Hello World')
-})
+});
 
-app.use(cors());
+// JSON and URL-encoded parsers AFTER static files but BEFORE routes
+// These will be skipped by multer automatically for multipart/form-data
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Routes come last
 app.use("/users", userRouter);
 app.use("/restaurant", restaurantRouter);
 app.use('/post', postRouter);
 app.use('/rating', ratingRouter);
-app.use('/uploads', express.static(path.join(_dirname,'uploads')));
 app.use('/login', loginRouter);
 app.use('/rate', rateRouter);
 app.use('/reserves', reserveRouter);
 app.use('/admin', adminDashboard);
 
-app.listen(port,() =>{
-    console.log (`Servidor escuchando en http://localhost:${port}`);
+app.listen(port, () => {
+    console.log(`Servidor escuchando en http://localhost:${port}`);
 });
