@@ -40,6 +40,8 @@ export const login = async (request, response) => {
         user: userFound.firstName,
         role: userFound.role,
         restaurantId: userFound.restaurantId,
+        profileComplete: userFound.profileComplete,
+        userStatus: userFound.userStatus
       };
     } 
     else if(role === "restaurant") {
@@ -47,7 +49,9 @@ export const login = async (request, response) => {
         id: userFound._id,          
         user: userFound.name,
         role: 'restaurant',
-        restaurantId: userFound._id
+        restaurantId: userFound._id,
+        profileComplete: userFound.profileComplete,
+        userStatus: userFound.userStatus
       };
     }
     else{
@@ -55,7 +59,9 @@ export const login = async (request, response) => {
         id: userFound._id,          
         user: userFound.name,
         role: userFound.role,
-        restaurantId: userFound._id
+        restaurantId: userFound._id,
+        profileComplete: userFound.profileComplete,
+        userStatus: userFound.userStatus
       };
     }
 

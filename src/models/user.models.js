@@ -43,7 +43,14 @@ const userSchema = new Schema({
         enum: ["user","admin"],
         required: true
     },
-
+    profileComplete: {
+        type: Boolean,
+        required: true
+    },
+    userStatus:{
+        type: Boolean,
+        required: true
+    }
 }, {
     timestamps: true 
 })
