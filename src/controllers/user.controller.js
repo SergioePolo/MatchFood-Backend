@@ -17,6 +17,8 @@ try {
     const newUser = {
         ...req.body,
         password:codePass,
+        profileComplete: false,
+        userStatus: true
     }
 
     const user = await userModel.create(newUser);
@@ -43,29 +45,39 @@ export const getUser = async (req, res)=> {
     }
 }
 
-//Update User
+//Update Usera
 
-export  const putUserById = async (req, res) => {
+export const putUserById = async (req, res) => {    
     try {
-        const idForUpdate= req.params.id;
-        const dataForUpdate= req.body;
+        const idForUpdate = req.params.id;
+        const dataForUpdate = req.body;
+        
+        // Hash password if provided
         if(dataForUpdate.password){
             dataForUpdate.password = await bcryptjs.hash(dataForUpdate.password, 10);
         }
 
+        // Add profile picture path if file was uploaded
         if(req.file){
+            dataForUpdate.profilePicture = `/uploads/users/profilePictures/${req.userId}/${req.file.filename}`
+        }
+        
+        // If dataForUpdate is empty but we have a file, create an object
+        if(Object.keys(dataForUpdate).length === 0 && req.file) {
             dataForUpdate.profilePicture = `/uploads/users/profilePictures/${req.userId}/${req.file.filename}`;
         }
+        
         await userModel.findByIdAndUpdate(idForUpdate, dataForUpdate);
-        return res.status (200).json ({
-            "mensaje": "Usuario Actualizado",
+        
+        return res.status(200).json({
+            msg: "Usuario Actualizado",
         });
         
     } catch (error) {
-        return res.status(500).json({ "mensaje": "Intenta actualizar mas tarde",
-        "error": error  || error.message
+        return res.status(500).json({ 
+            error: error.message || error
         });
-    };
+    }
 };
 
 //Delete User
