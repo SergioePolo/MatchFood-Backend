@@ -32,9 +32,9 @@ app.use(cors({
 // Serve static files early
 app.use('/uploads', express.static(path.join(_dirname, 'uploads')));
 
-app.get('/', (req, res) => {
+/* app.get('/', (req, res) => {
   res.send('Hello World')
-});
+}); */
 
 // JSON and URL-encoded parsers AFTER static files but BEFORE routes
 // These will be skipped by multer automatically for multipart/form-data
