@@ -83,9 +83,19 @@ export const putUserById = async (req, res) => {
 //Delete User
 
 export const deleteUserById = async(req, res) => {
+    console.log("usuario admitido para eliminar")
+    console.log(req.params.id)
     try {
-        const idForDelete= req.params.id;
+        const idForDelete = req.params.id;
         const user = await userModel.findById(idForDelete);
+        
+        // Check if user exists
+        if (!user) {
+            return res.status(404).json({
+                mensaje: "Usuario no encontrado"
+            });
+        }
+
         const posts = await postsModel.find({userId: idForDelete});
         const ratings = await ratingModel.find({userId: idForDelete});
         let route = '';
@@ -94,14 +104,12 @@ export const deleteUserById = async(req, res) => {
         // profilePictures
         if(user.profilePicture){
             route = path.join(UPLOADS_BASE,"users", "profilePictures", user._id.toString());
-            if (!fs.existsSync(route)) {
-                // No agregamos mensaje si no existe
-            } else {
+            if (fs.existsSync(route)) {
                 fs.rmdirSync(route, { recursive: true, force: true });
                 mediaFolders.push('Imagen de perfil eliminada');
-            };
+            }
         }
-        
+
         // Posts
         if (posts.length > 0) {
             for (const element of posts) {
@@ -112,10 +120,12 @@ export const deleteUserById = async(req, res) => {
                 }
             }
             mediaFolders.push('Posts eliminados');
-        }        
+        }
+
         // Ratings
         if (ratings.length > 0) {
             for (const element of ratings) {
+                await ratingModel.findByIdAndDelete(element._id.toString()); // Also delete the rating from DB
                 route = path.join(UPLOADS_BASE, 'restaurants', 'ratings', element._id.toString());
                 if (fs.existsSync(route)) {
                     fs.rmdirSync(route, { recursive: true, force: true });
@@ -123,17 +133,21 @@ export const deleteUserById = async(req, res) => {
             }
             mediaFolders.push('Ratings eliminados');
         }
-        // Eliminar restaurante al final de todo
-        await restaurantsModel.findByIdAndDelete(idForDelete);
 
+        // Eliminar USUARIO al final de todo (not restaurante!)
+        await userModel.findByIdAndDelete(idForDelete);
+        
         // Respuesta: solo enviar el array si hay contenido
         const response = { msg: 'Usuario eliminado con éxito' };
+
         if (mediaFolders.length > 0) {
             response.data = mediaFolders;
         }
+        
         return res.status(200).json(response);
 
     } catch (error) {
+        console.error("Error al eliminar usuario:", error);
         return res.status(500).json({
             mensaje: "Ocurrió un error al eliminar el usuario",
             error: error.message || error

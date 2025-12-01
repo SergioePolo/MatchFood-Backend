@@ -44,6 +44,7 @@ export const postReserve = async (req, res) => {
 
 // Get
 export const getAllReserves = async (req, res) => {
+  console.log("entrar reservas")
     try {
         const allReserves = await reservesModel.find()
             .populate('userId', 'firstName lastName email')

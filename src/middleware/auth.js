@@ -14,12 +14,10 @@ export const auth = (requiredRole) => {
         try {
             const decoded = await verifyToken(allowedToken);
             request.user = decoded;
-            
             // Los admins tienen acceso a todo
             if (decoded.role === "admin") {
                 return next();
             }
-
 
             if (requiredRole && decoded.role !== requiredRole) {
                 return response.status(403).json({

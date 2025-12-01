@@ -7,7 +7,7 @@ export const reserveRouter = express.Router();
 reserveRouter.post("/crear", auth(''), postReserve);
 
 //Get
-reserveRouter.get("/mostrar", getAllReserves);
+reserveRouter.get("/", getAllReserves);
 reserveRouter.get('/mis-reservas/:id', auth(''), getAllReservesByUser);
 reserveRouter.get('/restaurante/:id', auth('admin'), getAllReservesByRestaurant);
 
