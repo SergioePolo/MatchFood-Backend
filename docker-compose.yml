@@ -2,7 +2,7 @@ services:
   backend:
     build: ./
     image: mi-backend:latest
-    container_name: matchFood_backend
+    container_name: backend_b
     restart: unless-stopped
     ports:
       - "3000:3000"
