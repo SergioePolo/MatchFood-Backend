@@ -51,6 +51,9 @@ app.use('/rate', rateRouter);
 app.use('/reserves', reserveRouter);
 app.use('/admin', adminDashboard);
 
+
+
 app.listen(port, () => {
-    console.log(`Servidor escuchando en http://localhost:${port}`);
+  console.log("funciona")
+  console.log(`Servidor escuchando en http://localhost:${port}`);
 });
